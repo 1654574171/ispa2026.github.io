@@ -12,11 +12,16 @@
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
   const external = 'target="_blank" rel="noreferrer noopener"';
+  const chairSlideIds = [
+    'chairs-general', 'chairs-program', 'chairs-program-vice', 'chairs-local', 'chairs-workshop',
+    'chairs-publicity', 'chairs-publication', 'chairs-web', 'chairs-steering',
+  ];
+  const chairSlides = data.chairGroups.map((group, index) => ({ ...group, id: chairSlideIds[index] }));
   const slides = [
     ['top', 'Overview'], ['about', 'Why ISPA'], ['dates', 'Dates'], ['tracks', 'Tracks'],
-    ['chairs', 'Chairs'], ['submission', 'Submit'], ['support', 'Connect'],
+    ...chairSlides.map((group) => [group.id, group.label]),
+    ['submission', 'Submit'], ['support', 'Connect'],
   ];
-  const allChairs = data.chairGroups.flatMap((group) => group.members.map((member) => ({ ...member, role: group.label })));
 
   const action = (label, href, tone = 'light') => `
     <a class="share-action share-action--${tone}" href="${esc(href)}" ${external}>${esc(label)} <span aria-hidden="true">→</span></a>`;
@@ -77,15 +82,15 @@
       </section>`;
   }
 
-  function chairsSlide() {
+  function chairSlide(group, index) {
     return `
-      <section class="share-slide share-slide--chairs" id="chairs" aria-labelledby="chairs-title">
+      <section class="share-slide share-slide--chairs share-chair-slide" id="${esc(group.id)}" aria-labelledby="${esc(group.id)}-title">
         <div class="share-content share-chairs-content">
-          <div class="share-chairs-heading"><p class="share-kicker">CONFERENCE LEADERSHIP</p><h2 id="chairs-title">Meet the<br><em>chairs.</em></h2></div>
-          <div class="share-chair-grid">
-            ${allChairs.map((chair) => `<article class="share-chair-card">
+          <div class="share-chairs-heading"><p class="share-kicker">CONFERENCE LEADERSHIP · ${String(index + 1).padStart(2, '0')} / ${String(chairSlides.length).padStart(2, '0')}</p><h2 class="share-chair-title" id="${esc(group.id)}-title">${esc(group.label)}</h2></div>
+          <div class="share-chair-grid share-chair-grid--${group.members.length}">
+            ${group.members.map((chair) => `<article class="share-chair-card">
               <img class="share-chair-photo${chair.photoFit === 'contain' ? ' share-chair-photo--contain' : ''}" src="${esc(chair.photo)}" alt="Portrait of ${esc(chair.name)}" loading="lazy">
-              <h3>${esc(chair.name)}</h3><p>${esc(chair.role)}</p>
+              <h3>${esc(chair.name)}</h3><p>${esc(chair.institution)}</p>
             </article>`).join('')}
           </div>
         </div>
@@ -124,7 +129,7 @@
 
   app.innerHTML = `
     <main class="share-deck" id="main" data-active-slide="top" tabindex="0" aria-label="IEEE ISPA 2026 share deck">
-      ${introSlide()}${aboutSlide()}${datesSlide()}${tracksSlide()}${chairsSlide()}${submissionSlide()}${supportSlide()}
+      ${introSlide()}${aboutSlide()}${datesSlide()}${tracksSlide()}${chairSlides.map(chairSlide).join('')}${submissionSlide()}${supportSlide()}
     </main>
     <nav class="share-progress" aria-label="Share deck sections">
       ${slides.map(([id, label], index) => `<button type="button" data-slide-target="${id}" aria-label="Go to ${label}" aria-current="${index === 0 ? 'step' : 'false'}"><span>${String(index + 1).padStart(2, '0')}</span></button>`).join('')}

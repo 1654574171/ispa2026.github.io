@@ -37,30 +37,37 @@ class SiteSmokeTests(unittest.TestCase):
         page.add_script_tag(content=(ROOT / "app.js").read_text(encoding="utf-8"))
         return page
 
-    def test_share_deck_has_seven_full_page_modules(self):
+    def test_share_deck_has_full_page_modules_for_each_chair_category(self):
         page = self.page()
         deck = page.locator("main.share-deck")
         self.assertEqual(
             deck.locator(":scope > .share-slide").evaluate_all("slides => slides.map(slide => slide.id)"),
-            ["top", "about", "dates", "tracks", "chairs", "submission", "support"],
+            [
+                "top", "about", "dates", "tracks",
+                "chairs-general", "chairs-program", "chairs-program-vice", "chairs-local",
+                "chairs-workshop", "chairs-publicity", "chairs-publication", "chairs-web", "chairs-steering",
+                "submission", "support",
+            ],
         )
         self.assertEqual(deck.evaluate("deck => getComputedStyle(deck).scrollSnapType"), "y mandatory")
-        self.assertEqual(page.locator(".share-progress [data-slide-target]").count(), 7)
+        self.assertEqual(page.locator(".share-progress [data-slide-target]").count(), 15)
         page.close()
 
     def test_progress_navigation_activates_the_selected_module(self):
         page = self.page()
-        page.get_by_role("button", name="Go to Chairs").click()
-        self.assertEqual(page.locator("main.share-deck").get_attribute("data-active-slide"), "chairs")
+        page.get_by_role("button", name="Go to Program Chairs").click()
+        self.assertEqual(page.locator("main.share-deck").get_attribute("data-active-slide"), "chairs-program")
         page.close()
 
     def test_share_deck_keeps_all_chair_portraits(self):
         page = self.page()
-        chairs = page.locator("#chairs")
-        self.assertEqual(chairs.locator(".share-chair-card").count(), 20)
-        self.assertEqual(chairs.locator("img").count(), 20)
-        self.assertTrue(chairs.get_by_text("Laurence T. Yang", exact=True).is_visible())
-        self.assertTrue(chairs.get_by_text("Zhou Zhou", exact=True).is_visible())
+        chair_slides = page.locator(".share-chair-slide")
+        self.assertEqual(chair_slides.count(), 9)
+        self.assertEqual(chair_slides.locator(".share-chair-card").count(), 20)
+        self.assertEqual(chair_slides.locator("img").count(), 20)
+        self.assertTrue(page.locator("#chairs-program").get_by_text("Program Chairs", exact=True).is_visible())
+        self.assertTrue(page.locator("#chairs-steering").get_by_text("Laurence T. Yang", exact=True).is_visible())
+        self.assertTrue(page.locator("#chairs-workshop").get_by_text("Zhou Zhou", exact=True).is_visible())
         page.close()
 
     def test_share_deck_exposes_submission_and_official_actions(self):
