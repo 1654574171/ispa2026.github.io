@@ -120,6 +120,25 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertTrue(all(item["scrollWidth"] <= item["clientWidth"] for item in details))
         page.close()
 
+    def test_wide_desktop_chair_layout_uses_the_available_width(self):
+        page = self.page(width=1280, height=800)
+        general_program = page.locator("#chairs-general-program")
+        groups_width = round(general_program.locator(".share-chair-groups").bounding_box()["width"])
+        portrait_widths = general_program.locator(".share-chair-photo").evaluate_all(
+            "photos => photos.map(photo => Math.round(photo.getBoundingClientRect().width))"
+        )
+        self.assertGreaterEqual(groups_width, 1000)
+        self.assertEqual(set(portrait_widths), {168})
+        page.close()
+
+    def test_wide_desktop_keeps_three_program_vice_chairs_on_one_row(self):
+        page = self.page(width=1280, height=800)
+        top_positions = page.locator("#chairs-vice-local .share-chair-category:first-child .share-chair-photo").evaluate_all(
+            "photos => photos.map(photo => Math.round(photo.getBoundingClientRect().top))"
+        )
+        self.assertEqual(len(set(top_positions)), 1)
+        page.close()
+
     def test_share_deck_exposes_submission_and_official_actions(self):
         page = self.page()
         self.assertEqual(

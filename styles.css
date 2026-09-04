@@ -112,6 +112,14 @@ h1 span { color: #74c0ff; }
   .share-progress button { width: 22px; height: 22px; }
   .share-audio-toggle { top: 24px; right: 25px; width: 40px; height: 40px; }
 }
+@media (min-width: 960px) {
+  .share-chairs-content { align-items: stretch; }
+  .share-chairs-heading, .share-chair-groups { width: 100%; }
+  .share-chair-groups { column-gap: clamp(44px, 6vw, 80px); }
+  .share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { grid-template-columns: repeat(auto-fit, minmax(150px, 168px)); justify-content: space-between; gap: 24px; }
+  .share-chair-photo { width: 100%; height: auto; aspect-ratio: .82; }
+  #chairs-vice-local .share-chair-groups { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+}
 @media (max-height: 680px) and (max-width: 719px) {
   .share-hero-name { margin-top: 20px; }.share-swipe-hint { margin-top: 30px; }
   .share-chair-grid { gap: 9px; }.share-chair-card { grid-template-columns: 70px minmax(0, 1fr); column-gap: 10px; }.share-chair-photo { width: 70px; height: 86px; }.share-chair-card p { display: block; font-size: 9px; }
