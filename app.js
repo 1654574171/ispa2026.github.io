@@ -12,6 +12,12 @@
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
   const external = 'target="_blank" rel="noreferrer noopener"';
+  const initials = (name) => String(name)
+    .split(/\s+/)
+    .filter((word) => /[A-Za-z\u00C0-\u024F]/.test(word[0] || ''))
+    .map((word) => word[0].toUpperCase())
+    .slice(0, 2)
+    .join('');
   const chairSlides = [
     { id: 'chairs-general-program', label: 'General & Program Chairs', groups: data.chairGroups.slice(0, 2) },
     { id: 'chairs-vice-local', label: 'Vice & Local Chairs', groups: data.chairGroups.slice(2, 4) },
@@ -102,13 +108,21 @@
       </section>`;
   }
 
+  function chairCard(chair) {
+    const portrait = chair.photo
+      ? `<img class="share-chair-photo${chair.photoFit === 'contain' ? ' share-chair-photo--contain' : ''}" src="${esc(chair.photo)}" alt="Portrait of ${esc(chair.name)}" loading="lazy">`
+      : `<div class="share-chair-photo share-chair-photo--placeholder" aria-hidden="true">${esc(initials(chair.name))}</div>`;
+    const place = [chair.institution, chair.country].filter(Boolean).map(esc).join(', ');
+    return `<article class="share-chair-card">${portrait}<h3>${esc(chair.name)}</h3><p>${place}</p></article>`;
+  }
+
   function chairSlide(group, index) {
     return `
       <section class="share-slide share-slide--chairs share-chair-slide" id="${esc(group.id)}" aria-labelledby="${esc(group.id)}-title">
         <div class="share-content share-chairs-content">
-          <div class="share-chairs-heading"><p class="share-kicker">CONFERENCE LEADERSHIP · ${String(index + 1).padStart(2, '0')} / ${String(chairSlides.length).padStart(2, '0')}</p><h2 class="share-chair-title" id="${esc(group.id)}-title">${esc(group.label)}</h2></div>
+          <div class="share-chairs-heading"><p class="share-kicker">ORGANIZING COMMITTEE · ${String(index + 1).padStart(2, '0')} / ${String(chairSlides.length).padStart(2, '0')}</p><h2 class="share-chair-title" id="${esc(group.id)}-title">${esc(group.label)}</h2></div>
           <div class="share-chair-groups">
-            ${group.groups.map((category) => `<section class="share-chair-category" aria-label="${esc(category.label)}"><h3>${esc(category.label)}</h3><div class="share-chair-grid share-chair-grid--${category.members.length}">${category.members.map((chair) => `<article class="share-chair-card"><img class="share-chair-photo${chair.photoFit === 'contain' ? ' share-chair-photo--contain' : ''}" src="${esc(chair.photo)}" alt="Portrait of ${esc(chair.name)}" loading="lazy"><h3>${esc(chair.name)}</h3><p>${esc(chair.institution)}</p></article>`).join('')}</div></section>`).join('')}
+            ${group.groups.map((category) => `<section class="share-chair-category" aria-label="${esc(category.label)}"><h3>${esc(category.label)}</h3><div class="share-chair-grid share-chair-grid--${category.members.length}">${category.members.map(chairCard).join('')}</div></section>`).join('')}
           </div>
         </div>
       </section>`;

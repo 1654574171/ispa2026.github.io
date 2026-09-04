@@ -130,6 +130,7 @@
         members: [
           { name: 'Yangbo Jiang', institution: 'Zhejiang University of Finance & Economics', country: 'China', photo: 'assets/chairs/yangbo-jiang.png' },
           { name: 'Xun Shao', institution: 'Toyohashi University of Technology', country: 'Japan', photo: 'assets/chairs/xun-shao.jpeg' },
+          { name: 'Tingting Han', institution: 'Hainan University', country: 'China', photo: '' },
         ],
       },
       {
@@ -137,6 +138,7 @@
         members: [
           { name: 'Zhicai Zhang', institution: 'Hainan University', country: 'China', photo: 'assets/chairs/zhicai-zhang.jpg' },
           { name: 'Binbin Zhou', institution: 'Hangzhou City University', country: 'China', photo: 'assets/chairs/binbin-zhou.png' },
+          { name: 'Wenxuan Zhang', institution: 'Hainan University', country: 'China', photo: '' },
         ],
       },
       {
