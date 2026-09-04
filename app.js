@@ -86,16 +86,17 @@
           <h2 id="tracks-title">Tracks and topics</h2>
           <div class="share-tracks-overview" data-tracks-overview>
             ${data.tracks.map((track, index) => `
-              <button type="button" class="share-track-card" data-track-index="${index}" aria-expanded="false" aria-controls="tracks-panel">
-                <span class="share-track-no">${esc(track.number)}</span>
-                <h3>${esc(track.title)}</h3>
-                <p>${esc(track.summary)}</p>
-                <span class="share-track-open">View topics <span aria-hidden="true">+</span></span>
-              </button>`).join('')}
-          </div>
-          <div class="share-topic-panel" id="tracks-panel" data-topic-panel hidden>
-            <button type="button" class="share-topic-back" data-topics-back aria-label="Back to all tracks"><span aria-hidden="true">←</span> All tracks</button>
-            <div data-topics-inner></div>
+              <div class="share-track-item">
+                <button type="button" class="share-track-card" data-track-index="${index}" aria-expanded="false" aria-controls="track-topics-${index}">
+                  <span class="share-track-no">${esc(track.number)}</span>
+                  <h3>${esc(track.title)}</h3>
+                  <p>${esc(track.summary)}</p>
+                  <span class="share-track-open"><span data-track-open-text>View topics</span> <span aria-hidden="true">+</span></span>
+                </button>
+                <div class="share-track-topics" id="track-topics-${index}" data-track-topics hidden>
+                  <ul class="share-topic-list">${track.topics.map((topic) => `<li>${esc(topic)}</li>`).join('')}</ul>
+                </div>
+              </div>`).join('')}
           </div>
         </div>
       </section>`;
@@ -228,45 +229,27 @@
     }
   });
 
-  // Track 卡片 → 展开该 track 的 topics 面板
+  // Track 卡片 → 在卡片内部下方展开/收起 topics（互斥手风琴）
   const overview = document.querySelector('[data-tracks-overview]');
-  const panel = document.querySelector('[data-topic-panel]');
-  const panelInner = document.querySelector('[data-topics-inner]');
-  const backButton = document.querySelector('[data-topics-back]');
   const trackCards = [...document.querySelectorAll('[data-track-index]')];
   let openTrackIndex = -1;
 
-  function renderTopicPanel(index) {
-    const track = data.tracks[index];
+  function setOpenCard(index) {
     openTrackIndex = index;
-    panelInner.innerHTML = `
-      <div class="share-topic-head">
-        <span class="share-track-no">${esc(track.number)}</span>
-        <h3>${esc(track.title)}</h3>
-        <p class="share-topic-summary">${esc(track.summary)}</p>
-      </div>
-      <ol class="share-topic-list">
-        ${track.topics.map((topic) => `<li>${esc(topic)}</li>`).join('')}
-      </ol>`;
-    overview.hidden = true;
-    panel.hidden = false;
-    trackCards.forEach((card, cardIndex) => card.setAttribute('aria-expanded', cardIndex === index ? 'true' : 'false'));
+    trackCards.forEach((card, cardIndex) => {
+      const open = cardIndex === index;
+      card.setAttribute('aria-expanded', open ? 'true' : 'false');
+      card.parentElement.querySelector('[data-track-topics]').hidden = !open;
+      const openText = card.querySelector('[data-track-open-text]');
+      if (openText) openText.textContent = open ? 'Hide topics' : 'View topics';
+    });
   }
 
-  function closeTopicPanel() {
-    openTrackIndex = -1;
-    overview.hidden = false;
-    panel.hidden = true;
-    trackCards.forEach((card) => card.setAttribute('aria-expanded', 'false'));
-  }
-
-  if (overview && panel && trackCards.length) {
+  if (overview && trackCards.length) {
     trackCards.forEach((card, index) => {
       card.addEventListener('click', () => {
-        if (openTrackIndex === index) { closeTopicPanel(); return; }
-        renderTopicPanel(index);
+        setOpenCard(openTrackIndex === index ? -1 : index);
       });
     });
-    if (backButton) backButton.addEventListener('click', closeTopicPanel);
   }
 })();
