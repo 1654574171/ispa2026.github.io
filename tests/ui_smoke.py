@@ -72,7 +72,8 @@ class SiteSmokeTests(unittest.TestCase):
         overlay = page.locator(".share-city").evaluate(
             "node => getComputedStyle(node, '::after').backgroundImage"
         )
-        self.assertIn("rgba(4, 17, 39, 0.16)", overlay)
+        self.assertIn("rgb(2, 10, 24)", overlay)
+        self.assertIn("rgb(3, 11, 26)", overlay)
         page.close()
 
     def test_progress_navigation_activates_the_selected_module(self):
@@ -170,7 +171,18 @@ class SiteSmokeTests(unittest.TestCase):
         )
         self.assertEqual(categories[0]["left"], categories[1]["left"])
         self.assertLess(categories[0]["top"], categories[1]["top"])
-        self.assertEqual({category["width"] for category in categories}, {640})
+        self.assertEqual({category["width"] for category in categories}, {880})
+        page.close()
+
+    def test_wide_desktop_chair_portraits_flow_from_the_left(self):
+        page = self.page(width=1280, height=800)
+        grid = page.locator("#chairs-vice-workshop .share-chair-category:nth-child(2) .share-chair-grid")
+        positions = grid.locator(".share-chair-photo").evaluate_all(
+            "photos => photos.map(photo => Math.round(photo.getBoundingClientRect().left))"
+        )
+        self.assertEqual(grid.evaluate("grid => getComputedStyle(grid).justifyContent"), "start")
+        self.assertGreaterEqual(positions[1] - positions[0], 170)
+        self.assertLessEqual(positions[1] - positions[0], 180)
         page.close()
 
     def test_wide_desktop_stacks_category_portrait_rows(self):
