@@ -214,30 +214,34 @@
     audioToggle.title = playing ? 'Mute background music' : 'Play background music';
   }
 
-  // 浏览器自动播放受限时：在首次用户手势时恢复播放（点按钮本身除外，交给按钮处理）
-  const unlock = (event) => {
-    if (event.target && event.target.closest && event.target.closest('[data-audio-toggle]')) return;
-    if (backgroundMusic.paused) {
-      backgroundMusic.play().then(() => {
-        setMusicState(true);
-        detachUnlock();
-      }).catch(() => {});
-    }
-  };
+  // 浏览器自动播放策略：先用静音方式启动播放（muted autoplay 总是被允许），
+  // 用户产生任意交互（点击/触屏/按键/滚轮）后取消静音真正出声
+  let unlocked = false;
   const detachUnlock = () => {
-    ['pointerdown', 'touchstart', 'keydown'].forEach((type) => window.removeEventListener(type, unlock));
+    ['pointerdown', 'touchstart', 'keydown', 'wheel'].forEach((type) => window.removeEventListener(type, unlock));
   };
-  ['pointerdown', 'touchstart', 'keydown'].forEach((type) => window.addEventListener(type, unlock, { passive: true }));
+  const unlock = () => {
+    if (unlocked) return;
+    unlocked = true;
+    backgroundMusic.muted = false;
+    if (backgroundMusic.paused) {
+      backgroundMusic.play().then(() => setMusicState(true)).catch(() => {});
+    }
+    detachUnlock();
+  };
+  ['pointerdown', 'touchstart', 'keydown', 'wheel'].forEach((type) => window.addEventListener(type, unlock, { passive: true }));
 
-  // 一进入即为开启状态：自动尝试播放背景音乐
+  // 一进入即为开启状态：静音自动播放，首个交互后出声
+  backgroundMusic.muted = true;
   setMusicState(true);
   backgroundMusic.play().then(() => {
     setMusicState(true);
-    detachUnlock();
   }).catch(() => setMusicState(false));
 
   audioToggle.addEventListener('click', () => {
+    unlocked = true;
     detachUnlock();
+    backgroundMusic.muted = false;
     if (backgroundMusic.paused) {
       backgroundMusic.play().then(() => setMusicState(true)).catch(() => setMusicState(false));
     } else {
