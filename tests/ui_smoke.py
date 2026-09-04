@@ -51,6 +51,16 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertEqual(page.locator(".share-progress [data-slide-target]").count(), 11)
         page.close()
 
+    def test_document_uses_the_provided_site_icon(self):
+        page = self.page()
+        favicon = page.locator('link[rel="icon"]')
+        touch_icon = page.locator('link[rel="apple-touch-icon"]')
+        self.assertEqual(favicon.count(), 1)
+        self.assertEqual(touch_icon.count(), 1)
+        self.assertEqual(favicon.get_attribute("href"), "assets/icon.png")
+        self.assertEqual(touch_icon.get_attribute("href"), "assets/icon.png")
+        page.close()
+
     def test_progress_navigation_activates_the_selected_module(self):
         page = self.page()
         page.get_by_role("button", name="Go to General & Program Chairs").click()
