@@ -35,7 +35,7 @@
         <div class="share-content share-hero-content">
           <p class="share-kicker">THE ${esc(data.meta.edition).toUpperCase()} IEEE INTERNATIONAL SYMPOSIUM</p>
           <h1 id="hero-title">IEEE<br><span>ISPA</span> 2026</h1>
-          <p class="share-hero-name">${esc(data.meta.fullName)}</p>
+          <p class="share-hero-name">The 24th IEEE International Symposium<br>on Parallel and Distributed Processing<br>with Applications</p>
           <div class="share-hero-meta"><span>${esc(data.meta.dateShort)}</span><span>${esc(data.meta.city)}, ${esc(data.meta.country)}</span></div>
           <p class="share-swipe-hint">Swipe up to explore <span aria-hidden="true">↓</span></p>
         </div>
