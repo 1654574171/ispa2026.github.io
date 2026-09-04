@@ -160,7 +160,7 @@
     submission: {
       pageAllowance: '8+2 or 6+2',
       maximumPages: 10,
-      review: 'Single-blind peer review',
+      review: 'Single-blind',
       publication: [
         'All accepted papers will be submitted to IEEE Xplore and EI.',
         'Distinguished papers presented at the conference, after further revision, will be invited for submission to a special issue.',
