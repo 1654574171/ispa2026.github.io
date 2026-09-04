@@ -134,7 +134,6 @@ h1 span { color: #74c0ff; }
   .share-chair-groups { column-gap: clamp(44px, 6vw, 80px); }
   .share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { grid-template-columns: repeat(auto-fit, minmax(150px, 168px)); justify-content: space-between; gap: 24px; }
   .share-chair-photo { width: 100%; height: auto; aspect-ratio: .82; }
-  #chairs-vice-local .share-chair-groups { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
 }
 @media (max-height: 680px) and (max-width: 719px) {
   .share-hero-name { margin-top: 20px; }.share-swipe-hint { margin-top: 30px; }.share-hero-meta { margin-top: 18px; gap: 6px; }

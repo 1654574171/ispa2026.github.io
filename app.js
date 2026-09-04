@@ -20,9 +20,7 @@
     .join('');
   const chairSlides = [
     { id: 'chairs-general-program', label: 'General & Program Chairs', groups: data.chairGroups.slice(0, 2) },
-    { id: 'chairs-vice-local', label: 'Vice & Local Chairs', groups: data.chairGroups.slice(2, 4) },
-    { id: 'chairs-workshop-publicity', label: 'Workshop & Publicity Chairs', groups: data.chairGroups.slice(4, 6) },
-    { id: 'chairs-publication-web', label: 'Publication & Web Chairs', groups: data.chairGroups.slice(6, 8) },
+    { id: 'chairs-vice', label: 'Program Vice-Chairs', groups: data.chairGroups.slice(2, 3) },
     { id: 'chairs-steering', label: 'Steering Committee', groups: data.chairGroups.slice(8, 9) },
   ];
   const slides = [
