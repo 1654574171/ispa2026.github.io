@@ -110,8 +110,11 @@
     const portrait = chair.photo
       ? `<img class="share-chair-photo${chair.photoFit === 'contain' ? ' share-chair-photo--contain' : ''}" src="${esc(chair.photo)}" alt="Portrait of ${esc(chair.name)}" loading="lazy">`
       : `<div class="share-chair-photo share-chair-photo--placeholder" aria-hidden="true">${esc(initials(chair.name))}</div>`;
-    const place = [chair.institution, chair.country].filter(Boolean).map(esc).join(', ');
-    return `<article class="share-chair-card">${portrait}<h3>${esc(chair.name)}</h3><p>${place}</p></article>`;
+    const place = [
+      chair.institution ? `<span class="share-chair-inst">${esc(chair.institution)}</span>` : '',
+      chair.country ? `<span class="share-chair-country">${esc(chair.country)}</span>` : '',
+    ].join('');
+    return `<article class="share-chair-card">${portrait}<h3>${esc(chair.name)}</h3><p class="share-chair-place">${place}</p></article>`;
   }
 
   function chairSlide(group, index) {

@@ -71,6 +71,7 @@ h1 span { color: #74c0ff; }
 .share-chair-groups { display: grid; gap: clamp(28px, 5.5vw, 52px); width: min(100%, 820px); }
 .share-chair-type { margin: 0 0 clamp(12px, 3vw, 20px); font-size: clamp(28px, 6.4vw, 64px); line-height: .95; letter-spacing: -.04em; font-weight: 790; }
 .share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; width: 100%; max-width: none; }
+.share-chair-grid--3 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; width: 100%; max-width: none; }
 .share-chair-card { display: grid; grid-template-columns: 84px minmax(0, 1fr); column-gap: 13px; min-width: 0; align-items: center; }
 .share-chair-photo { grid-row: span 2; display: block; width: 84px; height: 104px; border-radius: 10px; object-fit: cover; object-position: center top; background: #dbe3ee; }
 .share-chair-photo--contain { object-fit: cover; object-position: center top; }
@@ -114,7 +115,7 @@ h1 span { color: #74c0ff; }
   .share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { grid-template-columns: repeat(auto-fill, 132px); gap: 24px; max-width: none; }
   .share-chair-card { display: block; }
   .share-chair-photo { width: 132px; height: 161px; }
-  .share-chair-card h3, .share-chair-card p { display: block; white-space: normal; }
+  .share-chair-card h3 { display: block; white-space: normal; }
   .share-chair-card h3 { overflow: visible; margin-top: 8px; font-size: 16px; text-overflow: clip; }
   .share-chairs-content { align-items: center; }
   .share-chairs-heading, .share-chair-groups { width: min(100%, 820px); }
@@ -136,7 +137,7 @@ h1 span { color: #74c0ff; }
 }
 @media (max-height: 680px) and (max-width: 719px) {
   .share-hero-name { margin-top: 20px; }.share-swipe-hint { margin-top: 30px; }.share-hero-meta { margin-top: 18px; gap: 6px; }
-  .share-chair-grid { gap: 9px; }.share-chair-card { grid-template-columns: 70px minmax(0, 1fr); column-gap: 10px; }.share-chair-photo { width: 70px; height: 86px; }.share-chair-card p { display: block; font-size: 9px; }.share-chair-type { font-size: 22px; margin-bottom: 8px; }
+  .share-chair-grid { gap: 9px; }.share-chair-grid--3 { gap: 12px; }.share-chair-card { grid-template-columns: 70px minmax(0, 1fr); column-gap: 10px; }.share-chair-photo { width: 70px; height: 86px; }.share-chair-inst { font-size: 10px; }.share-chair-country { font-size: 9px; }.share-chair-type { font-size: 22px; margin-bottom: 8px; }
   .share-track-card { padding: 12px 14px; }.share-track-card h3 { font-size: 15px; }.share-track-open { margin-top: 7px; }
   .share-topic-list li { padding: 6px 9px 6px 22px; font-size: 13px; }.share-topic-list li::before { left: 10px; }
 }
