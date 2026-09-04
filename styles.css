@@ -70,8 +70,8 @@ h1 span { color: #74c0ff; }
 .share-chairs-heading { margin-bottom: clamp(6px, 2vw, 16px); }
 .share-chair-groups { display: grid; gap: clamp(28px, 5.5vw, 52px); width: min(100%, 820px); }
 .share-chair-type { margin: 0 0 clamp(12px, 3vw, 20px); font-size: clamp(28px, 6.4vw, 64px); line-height: .95; letter-spacing: -.04em; font-weight: 790; }
-.share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; width: 100%; max-width: none; }
-.share-chair-grid--3 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; width: 100%; max-width: none; }
+.share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; width: 100%; max-width: none; }
+.share-chair-grid--3 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; width: 100%; max-width: none; }
 .share-chair-card { display: grid; grid-template-columns: 84px minmax(0, 1fr); column-gap: 13px; min-width: 0; align-items: center; }
 .share-chair-photo { grid-row: span 2; display: block; width: 84px; height: 104px; border-radius: 10px; object-fit: cover; object-position: center top; background: #dbe3ee; }
 .share-chair-photo--contain { object-fit: cover; object-position: center top; }
@@ -127,7 +127,7 @@ h1 span { color: #74c0ff; }
   .share-tracks-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 34px; }
   .share-track-card { padding: 18px 20px; }
   .share-topic-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { grid-template-columns: repeat(auto-fill, 132px); gap: 30px; max-width: none; }
+  .share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { grid-template-columns: repeat(auto-fill, 132px); gap: 38px; max-width: none; }
   .share-chair-card { display: block; }
   .share-chair-photo { width: 132px; height: 161px; }
   .share-chair-card h3 { display: block; white-space: normal; }
@@ -149,13 +149,13 @@ h1 span { color: #74c0ff; }
   .share-chairs-content { align-items: stretch; }
   .share-chairs-heading, .share-chair-groups { width: 100%; }
   .share-chair-groups { column-gap: clamp(56px, 7vw, 96px); }
-  .share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { grid-template-columns: repeat(auto-fit, minmax(150px, 168px)); justify-content: space-between; gap: 36px; }
-  .share-chair-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
+  .share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { grid-template-columns: repeat(auto-fit, minmax(150px, 168px)); justify-content: space-between; gap: 44px; }
+  .share-chair-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; }
   .share-chair-photo { width: 100%; height: auto; aspect-ratio: .82; }
 }
 @media (max-height: 680px) and (max-width: 719px) {
   .share-hero-name { margin-top: 20px; }.share-swipe-hint { margin-top: 30px; }.share-hero-meta { margin-top: 18px; gap: 6px; }
-  .share-chair-grid { gap: 12px; }.share-chair-grid--3 { gap: 14px; }.share-chair-card { grid-template-columns: 70px minmax(0, 1fr); column-gap: 10px; }.share-chair-photo { width: 70px; height: 86px; }.share-chair-place { font-size: 10px; }.share-chair-type { font-size: 22px; margin-bottom: 8px; }
+  .share-chair-grid { gap: 18px; }.share-chair-grid--3 { gap: 20px; }.share-chair-card { grid-template-columns: 70px minmax(0, 1fr); column-gap: 10px; }.share-chair-photo { width: 70px; height: 86px; }.share-chair-place { font-size: 10px; }.share-chair-type { font-size: 22px; margin-bottom: 8px; }
   .share-track-card { padding: 12px 14px; }.share-track-card h3 { font-size: 15px; }.share-track-open { margin-top: 7px; }
   .share-topic-list li { padding: 6px 9px 6px 22px; font-size: 13px; }.share-topic-list li::before { left: 10px; }
   .share-submission-facts { margin: 12px auto; gap: 8px; }.share-submission-facts div { padding: 10px 8px; border-radius: 11px; }.share-submission-facts strong { font-size: 12.5px; }.share-publication { margin-top: 10px; gap: 3px; padding: 8px 12px; }.share-publication p { font-size: 10px; }.share-subsection-label { margin-top: 10px; gap: 8px; }.share-special-issues { margin-top: 6px; gap: 5px; }.share-special-issues li { padding: 6px 9px; }.share-special-issues a { font-size: 10px; }
