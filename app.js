@@ -59,13 +59,20 @@
   }
 
   function datesSlide() {
+    const splitYear = (label) => {
+      const match = String(label).match(/^(.*?)\s*(\d{4})$/);
+      return match ? { when: match[1], year: match[2] } : { when: label, year: '' };
+    };
     return `
       <section class="share-slide share-slide--blue" id="dates" aria-labelledby="dates-title">
         <div class="share-content">
-          <p class="share-kicker">SAVE THE DATES</p>
-          <h2 id="dates-title">Your next<br><em>deadline.</em></h2>
+          <p class="share-kicker">Dates</p>
+          <h2 id="dates-title">Important Dates</h2>
           <div class="share-dates">
-            ${data.deadlines.map((item) => `<div class="share-date ${item.tone === 'primary' ? 'is-primary' : ''}"><time>${esc(item.dateLabel)}</time><span>${esc(item.title)}</span></div>`).join('')}
+            ${data.deadlines.map((item) => {
+              const { when, year } = splitYear(item.dateLabel);
+              return `<div class="share-date ${item.tone === 'primary' ? 'is-primary' : ''}"><time>${esc(when)}${year ? `<span class="share-date-year">${esc(year)}</span>` : ''}</time><span>${esc(item.title)}</span></div>`;
+            }).join('')}
           </div>
         </div>
       </section>`;
@@ -76,7 +83,7 @@
       <section class="share-slide share-slide--ink" id="tracks" aria-labelledby="tracks-title">
         <div class="share-content">
           <p class="share-kicker">CALL FOR PAPERS</p>
-          <h2 id="tracks-title">Four tracks.<br><em>One community.</em></h2>
+          <h2 id="tracks-title">Tracks and topics</h2>
           <div class="share-tracks">
             ${data.tracks.map((track) => `<article><span>${esc(track.number)}</span><h3>${esc(track.title)}</h3><p>${esc(track.summary)}</p></article>`).join('')}
           </div>

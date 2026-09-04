@@ -39,9 +39,10 @@ h1 span { color: #74c0ff; }
 .share-slide--blue .share-kicker { color: #a7d9ff; }
 .share-slide--blue h2 em { color: white; -webkit-text-stroke: 1px rgba(255,255,255,.45); }
 .share-dates { display: grid; gap: 9px; margin-top: clamp(30px, 7vw, 56px); }
-.share-date { display: grid; grid-template-columns: minmax(92px, .52fr) 1fr; gap: 16px; align-items: baseline; padding-bottom: 9px; border-bottom: 1px solid rgba(255,255,255,.18); }
-.share-date time { font-size: clamp(17px, 4.8vw, 31px); font-weight: 800; letter-spacing: -.045em; }
-.share-date span { color: rgba(255,255,255,.75); font-size: 12px; line-height: 1.35; }
+.share-date { display: grid; grid-template-columns: minmax(92px, .52fr) 1fr; gap: 16px; align-items: center; padding-bottom: 9px; border-bottom: 1px solid rgba(255,255,255,.18); }
+.share-date time { display: flex; flex-direction: column; line-height: 1.02; font-size: clamp(17px, 4.8vw, 31px); font-weight: 800; letter-spacing: -.045em; }
+.share-date .share-date-year { margin-top: 4px; font-size: clamp(11px, 3vw, 18px); font-weight: 800; letter-spacing: .12em; opacity: .7; }
+.share-date > span { color: rgba(255,255,255,.78); font-size: clamp(14px, 3.6vw, 18px); font-weight: 600; line-height: 1.2; letter-spacing: .01em; white-space: nowrap; }
 .share-date.is-primary time { color: #a7d9ff; }
 .share-slide--ink { color: white; background: var(--ink); }
 .share-slide--ink .share-kicker { color: #7fc4ff; }

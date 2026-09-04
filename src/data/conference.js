@@ -20,7 +20,7 @@
       { dateLabel: '30 OCT 2026', title: 'Author Notification Due', tone: 'standard' },
       { dateLabel: '30 NOV 2026', title: 'Paper Registration Due', tone: 'standard' },
       { dateLabel: '30 NOV 2026', title: 'Camera-ready Submission Due', tone: 'standard' },
-      { dateLabel: '27–30 DEC 2026', title: 'Conference Date', tone: 'conference' },
+      { dateLabel: '27–30 DEC 2026', title: 'Conference Dates', tone: 'conference' },
     ],
     tracks: [
       {
