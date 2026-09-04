@@ -32,8 +32,6 @@
     return `
       <section class="share-slide share-slide--hero" id="top" aria-labelledby="hero-title">
         <div class="share-city" aria-hidden="true"><img src="assets/kuala-lumpur-petronas.jpg" alt=""></div>
-        <audio data-background-music src="assets/music.mp3" loop preload="metadata"></audio>
-        <button class="share-audio-toggle" type="button" data-audio-toggle aria-label="Play background music" aria-pressed="false" title="Play background music"><span aria-hidden="true">♫</span></button>
         <div class="share-content share-hero-content">
           <p class="share-kicker">THE ${esc(data.meta.edition).toUpperCase()} IEEE INTERNATIONAL SYMPOSIUM</p>
           <h1 id="hero-title">IEEE<br><span>ISPA</span> 2026</h1>
@@ -49,7 +47,7 @@
       <section class="share-slide share-slide--paper" id="about" aria-labelledby="about-title">
         <div class="share-content share-center-content">
           <p class="share-kicker">WHY ISPA 2026</p>
-          <h2 id="about-title">Systems research<br>that moves <em>forward.</em></h2>
+          <h2 id="about-title">Introduction</h2>
           <p class="share-lead">${esc(data.meta.introduction)}</p>
           <div class="share-stats" aria-label="Conference highlights">
             <div><strong>24<sup>th</sup></strong><span>edition</span></div>
@@ -132,6 +130,8 @@
     <main class="share-deck" id="main" data-active-slide="top" tabindex="0" aria-label="IEEE ISPA 2026 share deck">
       ${introSlide()}${aboutSlide()}${datesSlide()}${tracksSlide()}${chairSlides.map(chairSlide).join('')}${submissionSlide()}${supportSlide()}
     </main>
+    <button class="share-audio-toggle" type="button" data-audio-toggle aria-label="Mute background music" aria-pressed="true" title="Mute background music"><span aria-hidden="true">♫</span></button>
+    <audio data-background-music src="assets/music.mp3" loop preload="auto"></audio>
     <nav class="share-progress" aria-label="Share deck sections">
       ${slides.map(([id, label], index) => `<button type="button" data-slide-target="${id}" aria-label="Go to ${label}" aria-current="${index === 0 ? 'step' : 'false'}"><span>${String(index + 1).padStart(2, '0')}</span></button>`).join('')}
     </nav>`;
@@ -144,7 +144,6 @@
   const backgroundMusic = document.querySelector('[data-background-music]');
   let activeIndex = 0;
   let scrollFrame = 0;
-  let musicIsPlaying = false;
 
   backgroundMusic.volume = 0.08;
 
@@ -175,24 +174,40 @@
   });
 
   function setMusicState(playing) {
-    musicIsPlaying = playing;
     audioToggle.setAttribute('aria-pressed', String(playing));
     audioToggle.setAttribute('aria-label', playing ? 'Mute background music' : 'Play background music');
     audioToggle.title = playing ? 'Mute background music' : 'Play background music';
   }
 
-  audioToggle.addEventListener('click', async () => {
-    if (!musicIsPlaying) {
-      try {
-        await backgroundMusic.play();
+  // 浏览器自动播放受限时：在首次用户手势时恢复播放（点按钮本身除外，交给按钮处理）
+  const unlock = (event) => {
+    if (event.target && event.target.closest && event.target.closest('[data-audio-toggle]')) return;
+    if (backgroundMusic.paused) {
+      backgroundMusic.play().then(() => {
         setMusicState(true);
-      } catch {
-        setMusicState(false);
-      }
-      return;
+        detachUnlock();
+      }).catch(() => {});
     }
+  };
+  const detachUnlock = () => {
+    ['pointerdown', 'touchstart', 'keydown'].forEach((type) => window.removeEventListener(type, unlock));
+  };
+  ['pointerdown', 'touchstart', 'keydown'].forEach((type) => window.addEventListener(type, unlock, { passive: true }));
 
-    backgroundMusic.pause();
-    setMusicState(false);
+  // 一进入即为开启状态：自动尝试播放背景音乐
+  setMusicState(true);
+  backgroundMusic.play().then(() => {
+    setMusicState(true);
+    detachUnlock();
+  }).catch(() => setMusicState(false));
+
+  audioToggle.addEventListener('click', () => {
+    detachUnlock();
+    if (backgroundMusic.paused) {
+      backgroundMusic.play().then(() => setMusicState(true)).catch(() => setMusicState(false));
+    } else {
+      backgroundMusic.pause();
+      setMusicState(false);
+    }
   });
 })();
