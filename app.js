@@ -127,17 +127,22 @@
   }
 
   function submissionSlide() {
+    const issues = data.specialIssues.map((issue) => `<li><a href="${esc(issue.url)}" target="_blank" rel="noopener"><strong>${esc(issue.journal)}</strong><span>${esc(issue.title)}</span></a></li>`).join('');
     return `
       <section class="share-slide share-slide--signal" id="submission" aria-labelledby="submission-title">
         <div class="share-content share-center-content">
           <p class="share-kicker">PAPER SUBMISSION</p>
           <h2 id="submission-title">Bring your<br><em>best work.</em></h2>
           <div class="share-submission-facts">
-            <div><strong>${esc(data.submission.format)}</strong><span>required format</span></div>
             <div><strong>${esc(data.submission.review)}</strong><span>review model</span></div>
-            <div><strong>${esc(data.submission.complimentaryPages)} + ${esc(data.submission.extraPages)}</strong><span>maximum 10 pages</span></div>
+            <div><strong>${esc(data.submission.pageAllowance)}</strong><span>maximum ${esc(data.submission.maximumPages)} pages</span></div>
           </div>
           ${action('Submit via EDAS', data.meta.edasUrl, 'dark')}
+          <div class="share-publication">
+            ${data.submission.publication.map((line) => `<p>${esc(line)}</p>`).join('')}
+          </div>
+          <p class="share-subsection-label">Special Issues</p>
+          <ul class="share-special-issues">${issues}</ul>
         </div>
       </section>`;
   }
