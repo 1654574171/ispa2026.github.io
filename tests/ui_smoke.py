@@ -57,6 +57,19 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertEqual(page.locator("main.share-deck").get_attribute("data-active-slide"), "chairs-general-program")
         page.close()
 
+    def test_background_music_control_toggles_its_state(self):
+        page = self.page()
+        controls = page.locator("[data-audio-toggle]")
+        self.assertEqual(controls.count(), 1)
+        control = controls.first
+        self.assertEqual(control.get_attribute("aria-pressed"), "false")
+        control.click()
+        self.assertEqual(control.get_attribute("aria-pressed"), "true")
+        self.assertEqual(control.get_attribute("aria-label"), "Mute background music")
+        control.click()
+        self.assertEqual(control.get_attribute("aria-pressed"), "false")
+        page.close()
+
     def test_share_deck_keeps_all_chair_portraits(self):
         page = self.page()
         chair_slides = page.locator(".share-chair-slide")

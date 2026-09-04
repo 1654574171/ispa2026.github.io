@@ -132,14 +132,19 @@
     </main>
     <nav class="share-progress" aria-label="Share deck sections">
       ${slides.map(([id, label], index) => `<button type="button" data-slide-target="${id}" aria-label="Go to ${label}" aria-current="${index === 0 ? 'step' : 'false'}"><span>${String(index + 1).padStart(2, '0')}</span></button>`).join('')}
-    </nav>`;
+    </nav>
+    <button class="share-audio-toggle" type="button" data-audio-toggle aria-label="Play background music" aria-pressed="false" title="Play background music"><span aria-hidden="true">♫</span></button>`;
 
   const deck = document.querySelector('.share-deck');
   const slideElements = [...deck.querySelectorAll('.share-slide')];
   const progressButtons = [...document.querySelectorAll('[data-slide-target]')];
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const audioToggle = document.querySelector('[data-audio-toggle]');
   let activeIndex = 0;
   let scrollFrame = 0;
+  let audioContext;
+  let ambientGain;
+  let musicIsPlaying = false;
 
   function activate(index, shouldScroll) {
     activeIndex = Math.max(0, Math.min(index, slideElements.length - 1));
@@ -165,5 +170,62 @@
     if (!['ArrowDown', 'PageDown', 'ArrowUp', 'PageUp'].includes(event.key)) return;
     event.preventDefault();
     activate(activeIndex + (['ArrowDown', 'PageDown'].includes(event.key) ? 1 : -1), true);
+  });
+
+  function setMusicState(playing) {
+    musicIsPlaying = playing;
+    audioToggle.setAttribute('aria-pressed', String(playing));
+    audioToggle.setAttribute('aria-label', playing ? 'Mute background music' : 'Play background music');
+    audioToggle.title = playing ? 'Mute background music' : 'Play background music';
+  }
+
+  function createAmbientSound() {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return false;
+    audioContext = new AudioContext();
+    ambientGain = audioContext.createGain();
+    ambientGain.gain.value = 0.0001;
+    ambientGain.connect(audioContext.destination);
+
+    [220, 277.18, 329.63].forEach((frequency, index) => {
+      const oscillator = audioContext.createOscillator();
+      const voiceGain = audioContext.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.value = frequency;
+      voiceGain.gain.value = index === 0 ? 0.12 : 0.07;
+      oscillator.connect(voiceGain).connect(ambientGain);
+      oscillator.start();
+    });
+
+    const shimmer = audioContext.createOscillator();
+    const shimmerGain = audioContext.createGain();
+    shimmer.frequency.value = 0.09;
+    shimmerGain.gain.value = 0.004;
+    shimmer.connect(shimmerGain).connect(ambientGain.gain);
+    shimmer.start();
+    return true;
+  }
+
+  audioToggle.addEventListener('click', async () => {
+    if (!musicIsPlaying) {
+      if (!audioContext && !createAmbientSound()) return;
+      try {
+        await audioContext.resume();
+        const now = audioContext.currentTime;
+        ambientGain.gain.cancelScheduledValues(now);
+        ambientGain.gain.setValueAtTime(Math.max(ambientGain.gain.value, 0.0001), now);
+        ambientGain.gain.exponentialRampToValueAtTime(0.024, now + 0.7);
+        setMusicState(true);
+      } catch {
+        setMusicState(false);
+      }
+      return;
+    }
+
+    const now = audioContext.currentTime;
+    ambientGain.gain.cancelScheduledValues(now);
+    ambientGain.gain.setValueAtTime(Math.max(ambientGain.gain.value, 0.0001), now);
+    ambientGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+    setMusicState(false);
   });
 })();
