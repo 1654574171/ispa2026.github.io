@@ -116,11 +116,11 @@
 
   function chairSlide(group, index) {
     return `
-      <section class="share-slide share-slide--chairs share-chair-slide" id="${esc(group.id)}" aria-labelledby="${esc(group.id)}-title">
+      <section class="share-slide share-slide--chairs share-chair-slide" id="${esc(group.id)}" aria-label="Organizing committee — ${esc(group.label)}">
         <div class="share-content share-chairs-content">
-          <div class="share-chairs-heading"><p class="share-kicker">ORGANIZING COMMITTEE · ${String(index + 1).padStart(2, '0')} / ${String(chairSlides.length).padStart(2, '0')}</p><h2 class="share-chair-title" id="${esc(group.id)}-title">${esc(group.label)}</h2></div>
+          <div class="share-chairs-heading"><p class="share-kicker">ORGANIZING COMMITTEE · ${String(index + 1).padStart(2, '0')} / ${String(chairSlides.length).padStart(2, '0')}</p></div>
           <div class="share-chair-groups">
-            ${group.groups.map((category) => `<section class="share-chair-category" aria-label="${esc(category.label)}"><h3>${esc(category.label)}</h3><div class="share-chair-grid share-chair-grid--${category.members.length}">${category.members.map(chairCard).join('')}</div></section>`).join('')}
+            ${group.groups.map((category) => `<section class="share-chair-category" aria-label="${esc(category.label)}"><h3 class="share-chair-type">${esc(category.label)}</h3><div class="share-chair-grid share-chair-grid--${category.members.length}">${category.members.map(chairCard).join('')}</div></section>`).join('')}
           </div>
         </div>
       </section>`;
