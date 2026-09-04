@@ -54,6 +54,8 @@ h1 span { color: #74c0ff; }
 .share-chairs-content { display: flex; flex-direction: column; justify-content: center; }
 .share-chairs-heading { margin-bottom: clamp(20px, 5vw, 40px); }
 .share-chair-title { max-width: 860px; font-size: clamp(40px, 10.5vw, 96px); line-height: .9; }
+.share-chair-groups { display: grid; gap: clamp(18px, 4vw, 34px); width: min(100%, 820px); }
+.share-chair-category h3 { margin: 0 0 10px; color: #0b72e7; font-size: clamp(11px, 2.6vw, 15px); line-height: 1.2; letter-spacing: .08em; text-transform: uppercase; }
 .share-chair-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 3vw, 26px); width: min(100%, 820px); }
 .share-chair-grid--1 { grid-template-columns: minmax(0, 230px); }
 .share-chair-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 620px; }
@@ -93,7 +95,9 @@ h1 span { color: #74c0ff; }
   .share-tracks p { display: block; }
   .share-chair-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 820px; }
   .share-chairs-content { align-items: center; }
-  .share-chairs-heading, .share-chair-grid { width: min(100%, 820px); }
+  .share-chairs-heading, .share-chair-groups { width: min(100%, 820px); }
+  .share-chair-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .share-chair-groups:has(.share-chair-category:only-child) { grid-template-columns: minmax(0, 1fr); }
   .share-logo-wrap { grid-template-columns: repeat(8, minmax(0, 1fr)); max-width: 840px; }
   .share-logo-wrap div { height: 78px; }
   .share-progress { right: 25px; }

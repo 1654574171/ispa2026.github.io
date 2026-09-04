@@ -12,11 +12,13 @@
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
   const external = 'target="_blank" rel="noreferrer noopener"';
-  const chairSlideIds = [
-    'chairs-general', 'chairs-program', 'chairs-program-vice', 'chairs-local', 'chairs-workshop',
-    'chairs-publicity', 'chairs-publication', 'chairs-web', 'chairs-steering',
+  const chairSlides = [
+    { id: 'chairs-general-program', label: 'General & Program Chairs', groups: data.chairGroups.slice(0, 2) },
+    { id: 'chairs-vice-local', label: 'Vice & Local Chairs', groups: data.chairGroups.slice(2, 4) },
+    { id: 'chairs-workshop-publicity', label: 'Workshop & Publicity Chairs', groups: data.chairGroups.slice(4, 6) },
+    { id: 'chairs-publication-web', label: 'Publication & Web Chairs', groups: data.chairGroups.slice(6, 8) },
+    { id: 'chairs-steering', label: 'Steering Committee', groups: data.chairGroups.slice(8, 9) },
   ];
-  const chairSlides = data.chairGroups.map((group, index) => ({ ...group, id: chairSlideIds[index] }));
   const slides = [
     ['top', 'Overview'], ['about', 'Why ISPA'], ['dates', 'Dates'], ['tracks', 'Tracks'],
     ...chairSlides.map((group) => [group.id, group.label]),
@@ -87,11 +89,8 @@
       <section class="share-slide share-slide--chairs share-chair-slide" id="${esc(group.id)}" aria-labelledby="${esc(group.id)}-title">
         <div class="share-content share-chairs-content">
           <div class="share-chairs-heading"><p class="share-kicker">CONFERENCE LEADERSHIP · ${String(index + 1).padStart(2, '0')} / ${String(chairSlides.length).padStart(2, '0')}</p><h2 class="share-chair-title" id="${esc(group.id)}-title">${esc(group.label)}</h2></div>
-          <div class="share-chair-grid share-chair-grid--${group.members.length}">
-            ${group.members.map((chair) => `<article class="share-chair-card">
-              <img class="share-chair-photo${chair.photoFit === 'contain' ? ' share-chair-photo--contain' : ''}" src="${esc(chair.photo)}" alt="Portrait of ${esc(chair.name)}" loading="lazy">
-              <h3>${esc(chair.name)}</h3><p>${esc(chair.institution)}</p>
-            </article>`).join('')}
+          <div class="share-chair-groups">
+            ${group.groups.map((category) => `<section class="share-chair-category" aria-label="${esc(category.label)}"><h3>${esc(category.label)}</h3><div class="share-chair-grid share-chair-grid--${category.members.length}">${category.members.map((chair) => `<article class="share-chair-card"><img class="share-chair-photo${chair.photoFit === 'contain' ? ' share-chair-photo--contain' : ''}" src="${esc(chair.photo)}" alt="Portrait of ${esc(chair.name)}" loading="lazy"><h3>${esc(chair.name)}</h3><p>${esc(chair.institution)}</p></article>`).join('')}</div></section>`).join('')}
           </div>
         </div>
       </section>`;
