@@ -153,7 +153,7 @@
         <div class="share-content share-final-content">
           <p class="share-kicker">KUALA LUMPUR · DECEMBER 2026</p>
           <h2 id="support-title">See you<br>at <em>ISPA.</em></h2>
-          <div class="share-actions">${action('Submit via EDAS', data.meta.edasUrl, 'light')}${action('Official website', data.meta.officialUrl, 'outline')}</div>
+          <div class="share-actions">${action('Official website', data.meta.officialUrl, 'light')}${action('Submit via EDAS', data.meta.edasUrl, 'outline')}</div>
           <div class="share-logo-wrap" aria-label="Sponsors and organizers">
             ${[...data.sponsors, ...data.organizers].map(({ name, logo }) => `<div><img src="${esc(logo)}" alt="${esc(name)} logo" loading="lazy"></div>`).join('')}
           </div>

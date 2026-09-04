@@ -148,10 +148,12 @@ h1 span { color: #74c0ff; }
 @media (min-width: 960px) {
   .share-chairs-content { align-items: stretch; }
   .share-chairs-heading, .share-chair-groups { width: 100%; }
-  .share-chair-groups { column-gap: clamp(56px, 7vw, 96px); }
-  .share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { grid-template-columns: repeat(auto-fit, minmax(150px, 168px)); justify-content: space-between; gap: 44px; }
-  .share-chair-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; }
+  .share-chair-groups { --chair-photo-size: clamp(128px, 13.125vw, 168px); column-gap: clamp(20px, 2vw, 28px); }
+  .share-chair-groups:has(.share-chair-grid--3):not(:has(.share-chair-category:only-child)) { grid-template-columns: minmax(0, 3.1fr) minmax(0, 2fr); }
+  .share-chair-grid, .share-chair-grid--1, .share-chair-grid--2 { grid-template-columns: repeat(auto-fit, var(--chair-photo-size)); justify-content: space-between; gap: clamp(20px, 2vw, 28px); }
+  .share-chair-grid--3 { grid-template-columns: repeat(3, var(--chair-photo-size)); justify-content: space-between; gap: clamp(20px, 2vw, 28px); }
   .share-chair-photo { width: 100%; height: auto; aspect-ratio: .82; }
+  .share-chair-type { min-height: 144px; margin-bottom: 20px; font-size: clamp(38px, 3.75vw, 48px); }
 }
 @media (max-height: 680px) and (max-width: 719px) {
   .share-hero-name { margin-top: 20px; }.share-swipe-hint { margin-top: 30px; }.share-hero-meta { margin-top: 18px; gap: 6px; }

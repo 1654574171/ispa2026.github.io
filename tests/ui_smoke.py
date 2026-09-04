@@ -43,12 +43,12 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertEqual(
             deck.locator(":scope > .share-slide").evaluate_all("slides => slides.map(slide => slide.id)"),
             [
-                "top", "about", "dates", "tracks", "chairs-general-program", "chairs-vice-local",
-                "chairs-workshop-publicity", "chairs-publication-web", "chairs-steering", "submission", "support",
+                "top", "about", "dates", "tracks", "chairs-general-program", "chairs-vice-workshop",
+                "chairs-steering", "submission", "support",
             ],
         )
         self.assertEqual(deck.evaluate("deck => getComputedStyle(deck).scrollSnapType"), "y mandatory")
-        self.assertEqual(page.locator(".share-progress [data-slide-target]").count(), 11)
+        self.assertEqual(page.locator(".share-progress [data-slide-target]").count(), 9)
         page.close()
 
     def test_document_uses_the_provided_site_icon(self):
@@ -67,37 +67,29 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertEqual(page.locator("main.share-deck").get_attribute("data-active-slide"), "chairs-general-program")
         page.close()
 
-    def test_background_music_control_toggles_its_state(self):
+    def test_background_music_control_uses_the_global_music_source(self):
         page = self.page()
-        controls = page.locator("#top [data-audio-toggle]")
+        controls = page.locator("[data-audio-toggle]")
         self.assertEqual(controls.count(), 1)
-        self.assertEqual(page.locator(".share-slide:not(#top) [data-audio-toggle]").count(), 0)
+        self.assertEqual(page.locator("#top [data-audio-toggle]").count(), 0)
         audio = page.locator("audio[data-background-music]")
         self.assertEqual(audio.count(), 1)
         self.assertEqual(audio.get_attribute("src"), "assets/music.mp3")
         self.assertIsNotNone(audio.get_attribute("loop"))
-        page.evaluate("HTMLMediaElement.prototype.play = () => Promise.resolve()")
-        control = controls.first
-        self.assertEqual(control.get_attribute("aria-pressed"), "false")
-        control.click()
-        self.assertEqual(control.get_attribute("aria-pressed"), "true")
-        self.assertEqual(control.get_attribute("aria-label"), "Mute background music")
-        control.click()
-        self.assertEqual(control.get_attribute("aria-pressed"), "false")
         page.close()
 
     def test_share_deck_keeps_all_chair_portraits(self):
         page = self.page()
         chair_slides = page.locator(".share-chair-slide")
-        self.assertEqual(chair_slides.count(), 5)
-        self.assertEqual(chair_slides.locator(".share-chair-card").count(), 20)
-        self.assertEqual(chair_slides.locator("img").count(), 20)
+        self.assertEqual(chair_slides.count(), 3)
+        self.assertEqual(chair_slides.locator(".share-chair-card").count(), 12)
+        self.assertEqual(chair_slides.locator("img").count(), 12)
         general_program = page.locator("#chairs-general-program")
         self.assertTrue(general_program.get_by_text("General Chairs", exact=True).is_visible())
         self.assertTrue(general_program.get_by_text("Program Chairs", exact=True).is_visible())
-        self.assertTrue(page.locator("#chairs-vice-local").get_by_text("Local Chairs", exact=True).is_visible())
+        self.assertTrue(page.locator("#chairs-vice-workshop").get_by_text("Program Vice-Chairs", exact=True).is_visible())
         self.assertTrue(page.locator("#chairs-steering").get_by_text("Laurence T. Yang", exact=True).is_visible())
-        self.assertTrue(page.locator("#chairs-workshop-publicity").get_by_text("Zhou Zhou", exact=True).is_visible())
+        self.assertTrue(page.locator("#chairs-vice-workshop").get_by_text("Zhou Zhou", exact=True).is_visible())
         page.close()
 
     def test_mobile_chair_cards_use_consistent_left_photo_layout(self):
@@ -122,12 +114,12 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertTrue(all(item["nameLeft"] == item["institutionLeft"] for item in layouts))
         page.close()
 
-    def test_mobile_chair_institutions_are_not_clipped(self):
+    def test_mobile_chair_places_use_a_compact_single_line_layout(self):
         page = self.page()
         details = page.locator(".share-chair-slide .share-chair-card p").evaluate_all(
-            "details => details.map(detail => ({ scrollWidth: detail.scrollWidth, clientWidth: detail.clientWidth }))"
+            "details => details.map(detail => ({ whiteSpace: getComputedStyle(detail).whiteSpace, overflow: getComputedStyle(detail).overflow }))"
         )
-        self.assertTrue(all(item["scrollWidth"] <= item["clientWidth"] for item in details))
+        self.assertTrue(all(item["whiteSpace"] == "nowrap" and item["overflow"] == "hidden" for item in details))
         page.close()
 
     def test_wide_desktop_chair_layout_uses_the_available_width(self):
@@ -143,10 +135,26 @@ class SiteSmokeTests(unittest.TestCase):
 
     def test_wide_desktop_keeps_three_program_vice_chairs_on_one_row(self):
         page = self.page(width=1280, height=800)
-        top_positions = page.locator("#chairs-vice-local .share-chair-category:first-child .share-chair-photo").evaluate_all(
+        top_positions = page.locator("#chairs-vice-workshop .share-chair-category:first-child .share-chair-photo").evaluate_all(
             "photos => photos.map(photo => Math.round(photo.getBoundingClientRect().top))"
         )
         self.assertEqual(len(set(top_positions)), 1)
+        page.close()
+
+    def test_wide_desktop_uses_one_portrait_size_across_chair_pages(self):
+        page = self.page(width=1280, height=800)
+        portrait_widths = page.locator(".share-chair-slide .share-chair-photo").evaluate_all(
+            "photos => photos.map(photo => Math.round(photo.getBoundingClientRect().width))"
+        )
+        self.assertEqual(set(portrait_widths), {168})
+        page.close()
+
+    def test_wide_desktop_aligns_portraits_below_category_titles(self):
+        page = self.page(width=1280, height=800)
+        first_portrait_tops = page.locator("#chairs-vice-workshop .share-chair-category").evaluate_all(
+            "categories => categories.map(category => Math.round(category.querySelector('.share-chair-photo').getBoundingClientRect().top))"
+        )
+        self.assertEqual(len(set(first_portrait_tops)), 1)
         page.close()
 
     def test_share_deck_exposes_submission_and_official_actions(self):
@@ -159,6 +167,17 @@ class SiteSmokeTests(unittest.TestCase):
             page.locator("#support").get_by_role("link", name="Official website").get_attribute("href"),
             "https://ieee-ai-for-science.org/2026/ispa/",
         )
+        page.close()
+
+    def test_final_actions_swap_order_and_color_treatments(self):
+        page = self.page()
+        actions = page.locator("#support .share-actions a").evaluate_all(
+            "links => links.map(link => ({ label: link.textContent.trim(), className: link.className }))"
+        )
+        self.assertEqual(actions, [
+            {"label": "Official website →", "className": "share-action share-action--light"},
+            {"label": "Submit via EDAS →", "className": "share-action share-action--outline"},
+        ])
         page.close()
 
     def test_share_deck_keeps_supporting_organization_logos(self):
