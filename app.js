@@ -127,7 +127,7 @@
   }
 
   function submissionSlide() {
-    const issues = data.specialIssues.map((issue) => `<li><strong>${esc(issue.journal)}</strong><span>${esc(issue.title)}</span><a href="${esc(issue.url)}" target="_blank" rel="noopener">${esc(issue.url)}</a></li>`).join('');
+    const issues = data.specialIssues.map((issue) => `<li><a href="${esc(issue.url)}" target="_blank" rel="noopener">${esc(issue.journal)}</a></li>`).join('');
     return `
       <section class="share-slide share-slide--signal" id="submission" aria-labelledby="submission-title">
         <div class="share-content share-center-content">
