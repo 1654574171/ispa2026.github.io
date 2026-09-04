@@ -130,7 +130,7 @@ class SiteSmokeTests(unittest.TestCase):
             "photos => photos.map(photo => Math.round(photo.getBoundingClientRect().width))"
         )
         self.assertGreaterEqual(groups_width, 1000)
-        self.assertEqual(set(portrait_widths), {168})
+        self.assertEqual(set(portrait_widths), {150})
         page.close()
 
     def test_wide_desktop_keeps_three_program_vice_chairs_on_one_row(self):
@@ -146,15 +146,25 @@ class SiteSmokeTests(unittest.TestCase):
         portrait_widths = page.locator(".share-chair-slide .share-chair-photo").evaluate_all(
             "photos => photos.map(photo => Math.round(photo.getBoundingClientRect().width))"
         )
-        self.assertEqual(set(portrait_widths), {168})
+        self.assertEqual(set(portrait_widths), {150})
         page.close()
 
-    def test_wide_desktop_aligns_portraits_below_category_titles(self):
+    def test_wide_desktop_stacks_complete_chair_categories(self):
+        page = self.page(width=1280, height=800)
+        categories = page.locator("#chairs-general-program .share-chair-category").evaluate_all(
+            "categories => categories.map(category => { const box = category.getBoundingClientRect(); return { left: Math.round(box.left), top: Math.round(box.top), width: Math.round(box.width) }; })"
+        )
+        self.assertEqual(categories[0]["left"], categories[1]["left"])
+        self.assertLess(categories[0]["top"], categories[1]["top"])
+        self.assertEqual({category["width"] for category in categories}, {640})
+        page.close()
+
+    def test_wide_desktop_stacks_category_portrait_rows(self):
         page = self.page(width=1280, height=800)
         first_portrait_tops = page.locator("#chairs-vice-workshop .share-chair-category").evaluate_all(
             "categories => categories.map(category => Math.round(category.querySelector('.share-chair-photo').getBoundingClientRect().top))"
         )
-        self.assertEqual(len(set(first_portrait_tops)), 1)
+        self.assertLess(first_portrait_tops[0], first_portrait_tops[1])
         page.close()
 
     def test_share_deck_exposes_submission_and_official_actions(self):
