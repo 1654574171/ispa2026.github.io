@@ -119,7 +119,7 @@
           <div class="reveal">
             <p class="eyebrow">Important Dates</p>
             <h2 class="section-title" id="dates-title">Keep the key moments in view.</h2>
-            <p class="section-intro">A simple timeline for the deadlines that matter most to authors.</p>
+            <p class="section-intro"></p>
           </div>
           <div class="timeline reveal">
             ${data.deadlines.map((item) => {
@@ -156,7 +156,7 @@
     return `
       <section class="section tracks-intro" id="tracks" aria-labelledby="tracks-title">
         <div class="section-inner reveal">
-          ${sectionHeading('Tracks & Topics', 'Four tracks.<br>One broad systems community.', 'Explore each area at your own pace. Full topic lists are available inline without turning the page into a dense CFP poster.')}
+          ${sectionHeading('Tracks & Topics', 'Four tracks.<br>One broad systems community.', '')}
         </div>
       </section>
       ${data.tracks.map(trackSection).join('')}`;
@@ -188,7 +188,6 @@
         <div class="section-inner">
           <div class="chairs-head reveal">
             <div>${sectionHeading('Conference Leadership', 'Meet the people shaping ISPA 2026.')}</div>
-            <p class="section-intro">Each committee group is presented separately for a comfortable mobile reading experience.</p>
           </div>
           <div class="chair-sections">
             ${data.chairGroups.map((group) => `
@@ -263,7 +262,7 @@
     return `
       <section class="section sponsors" aria-labelledby="support-title">
         <div class="section-inner">
-          <div class="reveal">${sectionHeading('Community & Support', 'The organizations behind the event.', 'Official identities from the supporting organizations are shown below.')}</div>
+          <div class="reveal">${sectionHeading('Community & Support', 'The organizations behind the event.', '')}</div>
           <div class="logo-group reveal">
             <p class="logo-group-title" id="support-title">Sponsored and supported by</p>
             <div class="logo-grid">${data.sponsors.map(({ name, logo }) => `<div class="logo-placeholder supporter-logo"><img src="${esc(logo)}" alt="${esc(name)} logo" loading="lazy"></div>`).join('')}</div>
