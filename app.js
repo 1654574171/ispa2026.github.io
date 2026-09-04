@@ -21,6 +21,7 @@
   const chairSlides = [
     { id: 'chairs-general-program', label: 'General & Program Chairs', groups: data.chairGroups.slice(0, 2) },
     { id: 'chairs-vice', label: 'Program Vice-Chairs', groups: data.chairGroups.slice(2, 3) },
+    { id: 'chairs-workshop', label: 'Workshop / Special Session Chairs', groups: data.chairGroups.slice(4, 5) },
     { id: 'chairs-steering', label: 'Steering Committee', groups: data.chairGroups.slice(8, 9) },
   ];
   const slides = [
