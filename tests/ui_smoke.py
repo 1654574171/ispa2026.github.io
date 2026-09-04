@@ -67,6 +67,14 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertEqual(description.evaluate("node => getComputedStyle(node).color"), "rgba(255, 255, 255, 0.92)")
         page.close()
 
+    def test_hero_image_has_a_supporting_dark_overlay(self):
+        page = self.page()
+        overlay = page.locator(".share-city").evaluate(
+            "node => getComputedStyle(node, '::after').backgroundImage"
+        )
+        self.assertIn("rgba(4, 17, 39, 0.16)", overlay)
+        page.close()
+
     def test_progress_navigation_activates_the_selected_module(self):
         page = self.page()
         page.get_by_role("button", name="Go to General & Program Chairs").click()
