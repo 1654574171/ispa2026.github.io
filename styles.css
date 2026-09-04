@@ -84,7 +84,7 @@ h1 span { color: #74c0ff; }
 .share-progress button { width: 14px; height: 14px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.68); color: var(--ink); box-shadow: 0 2px 8px rgba(7,29,61,.15); cursor: pointer; }
 .share-progress button span { display: none; }
 .share-progress button[aria-current="step"] { background: var(--blue); box-shadow: 0 0 0 3px rgba(255,255,255,.7); }
-.share-audio-toggle { position: fixed; z-index: 9; top: 15px; right: 15px; width: 42px; height: 42px; padding: 0; border: 1px solid rgba(7,29,61,.14); border-radius: 50%; color: var(--ink); background: rgba(255,255,255,.94); box-shadow: 0 4px 14px rgba(7,29,61,.16); cursor: pointer; transition: transform .2s ease, background .2s ease, color .2s ease; }
+.share-audio-toggle { position: absolute; z-index: 3; top: 15px; right: 15px; width: 36px; height: 36px; padding: 0; border: 1px solid rgba(7,29,61,.14); border-radius: 50%; color: var(--ink); background: rgba(255,255,255,.94); box-shadow: 0 4px 14px rgba(7,29,61,.16); cursor: pointer; transition: transform .2s ease, background .2s ease, color .2s ease; }
 .share-audio-toggle:hover { transform: translateY(-2px); }
 .share-audio-toggle span { display: block; font-size: 21px; line-height: 1; }
 .share-audio-toggle[aria-pressed="true"] { color: white; background: var(--blue); }
@@ -110,7 +110,7 @@ h1 span { color: #74c0ff; }
   .share-logo-wrap img { height: 42px; }
   .share-progress { right: 25px; }
   .share-progress button { width: 22px; height: 22px; }
-  .share-audio-toggle { top: 24px; right: 25px; width: 46px; height: 46px; }
+  .share-audio-toggle { top: 24px; right: 25px; width: 40px; height: 40px; }
 }
 @media (max-height: 680px) and (max-width: 719px) {
   .share-hero-name { margin-top: 20px; }.share-swipe-hint { margin-top: 30px; }

@@ -59,8 +59,14 @@ class SiteSmokeTests(unittest.TestCase):
 
     def test_background_music_control_toggles_its_state(self):
         page = self.page()
-        controls = page.locator("[data-audio-toggle]")
+        controls = page.locator("#top [data-audio-toggle]")
         self.assertEqual(controls.count(), 1)
+        self.assertEqual(page.locator(".share-slide:not(#top) [data-audio-toggle]").count(), 0)
+        audio = page.locator("audio[data-background-music]")
+        self.assertEqual(audio.count(), 1)
+        self.assertEqual(audio.get_attribute("src"), "assets/music.mp3")
+        self.assertIsNotNone(audio.get_attribute("loop"))
+        page.evaluate("HTMLMediaElement.prototype.play = () => Promise.resolve()")
         control = controls.first
         self.assertEqual(control.get_attribute("aria-pressed"), "false")
         control.click()
