@@ -76,7 +76,7 @@ h1 span { color: #74c0ff; }
 .share-chair-photo { grid-row: span 2; display: block; width: 84px; height: 104px; border-radius: 10px; object-fit: cover; object-position: center top; background: #dbe3ee; }
 .share-chair-photo--contain { object-fit: cover; object-position: center top; }
 .share-chair-photo--placeholder { display: grid; place-items: center; background: linear-gradient(145deg, #cfe3f5, #a9c9e8); color: #33547a; font-weight: 800; font-size: clamp(18px, 3vw, 30px); letter-spacing: .04em; }
-.share-chair-card h3 { grid-column: 2; overflow: hidden; align-self: end; margin: 0; font-size: clamp(15px, 4vw, 18px); line-height: 1.05; letter-spacing: -.03em; text-overflow: ellipsis; white-space: nowrap; }
+.share-chair-card h3 { grid-column: 2; overflow: hidden; align-self: end; margin: 0; font-size: clamp(15px, 4vw, 18px); line-height: 1.05; letter-spacing: -.03em; text-overflow: ellipsis; white-space: nowrap; text-transform: none; }
 .share-chair-card p { grid-column: 2; overflow: visible; align-self: start; margin: 5px 0 0; color: #58718e; font-size: clamp(10px, 2.6vw, 12px); line-height: 1.15; text-overflow: clip; white-space: normal; }
 .share-slide--signal { background: #91caff; }
 .share-slide--signal h2 em { color: #0b3978; }
