@@ -121,6 +121,19 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertTrue(support.get_by_alt_text("Zhengzhou University logo").is_visible())
         page.close()
 
+    def test_mobile_support_logos_use_white_cards_and_equal_heights(self):
+        page = self.page()
+        support = page.locator("#support")
+        logo_heights = support.locator(".share-logo-wrap img").evaluate_all(
+            "logos => logos.map(logo => Math.round(logo.getBoundingClientRect().height))"
+        )
+        card_backgrounds = support.locator(".share-logo-wrap > div").evaluate_all(
+            "cards => cards.map(card => getComputedStyle(card).backgroundColor)"
+        )
+        self.assertEqual(set(logo_heights), {36})
+        self.assertEqual(set(card_backgrounds), {"rgb(255, 255, 255)"})
+        page.close()
+
 
 if __name__ == "__main__":
     unittest.main()
