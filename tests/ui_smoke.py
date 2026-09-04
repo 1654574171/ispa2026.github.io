@@ -71,6 +71,36 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertTrue(page.locator("#chairs-workshop-publicity").get_by_text("Zhou Zhou", exact=True).is_visible())
         page.close()
 
+    def test_mobile_chair_cards_use_consistent_left_photo_layout(self):
+        page = self.page()
+        layouts = page.locator(".share-chair-slide .share-chair-card").evaluate_all(
+            """cards => cards.map(card => {
+                const photo = card.querySelector('img').getBoundingClientRect();
+                const name = card.querySelector('h3').getBoundingClientRect();
+                const institution = card.querySelector('p').getBoundingClientRect();
+                return {
+                    photoWidth: Math.round(photo.width),
+                    photoHeight: Math.round(photo.height),
+                    photoLeft: Math.round(photo.left),
+                    nameLeft: Math.round(name.left),
+                    institutionLeft: Math.round(institution.left),
+                };
+            })"""
+        )
+        self.assertEqual({item["photoWidth"] for item in layouts}, {84})
+        self.assertEqual({item["photoHeight"] for item in layouts}, {104})
+        self.assertTrue(all(item["photoLeft"] < item["nameLeft"] for item in layouts))
+        self.assertTrue(all(item["nameLeft"] == item["institutionLeft"] for item in layouts))
+        page.close()
+
+    def test_mobile_chair_institutions_are_not_clipped(self):
+        page = self.page()
+        details = page.locator(".share-chair-slide .share-chair-card p").evaluate_all(
+            "details => details.map(detail => ({ scrollWidth: detail.scrollWidth, clientWidth: detail.clientWidth }))"
+        )
+        self.assertTrue(all(item["scrollWidth"] <= item["clientWidth"] for item in details))
+        page.close()
+
     def test_share_deck_exposes_submission_and_official_actions(self):
         page = self.page()
         self.assertEqual(
