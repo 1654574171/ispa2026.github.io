@@ -61,6 +61,12 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertEqual(touch_icon.get_attribute("href"), "assets/icon.png")
         page.close()
 
+    def test_hero_description_uses_a_high_contrast_color(self):
+        page = self.page()
+        description = page.locator(".share-hero-name")
+        self.assertEqual(description.evaluate("node => getComputedStyle(node).color"), "rgba(255, 255, 255, 0.92)")
+        page.close()
+
     def test_progress_navigation_activates_the_selected_module(self):
         page = self.page()
         page.get_by_role("button", name="Go to General & Program Chairs").click()
