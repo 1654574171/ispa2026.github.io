@@ -66,7 +66,7 @@
     return `
       <section class="share-slide share-slide--blue" id="dates" aria-labelledby="dates-title">
         <div class="share-content">
-          <p class="share-kicker">Dates</p>
+          <p class="share-kicker">DATES</p>
           <h2 id="dates-title">Important Dates</h2>
           <div class="share-dates">
             ${data.deadlines.map((item) => {
