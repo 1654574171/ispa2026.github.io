@@ -94,9 +94,10 @@ h1 span { color: #74c0ff; }
 .share-publication p { margin: 0; color: #33547a; font-size: clamp(11px, 2.9vw, 13.5px); line-height: 1.45; }
 .share-subsection-label { margin: clamp(14px, 3vw, 22px) 0 0; font-size: clamp(10px, 2.6vw, 11.5px); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #58718e; }
 .share-special-issues { list-style: none; margin: clamp(8px, 1.8vw, 13px) auto 0; padding: 0; width: min(100%, 680px); display: grid; gap: 7px; text-align: left; }
-.share-special-issues a { display: block; padding: 8px 12px; border: 1px solid rgba(7,29,61,.14); border-radius: 10px; background: rgba(255,255,255,.55); text-decoration: none; }
+.share-special-issues li { padding: 8px 12px; border: 1px solid rgba(7,29,61,.14); border-radius: 10px; background: rgba(255,255,255,.55); }
 .share-special-issues strong { display: block; color: #0b3978; font-size: clamp(11px, 2.9vw, 13px); line-height: 1.3; }
 .share-special-issues span { display: block; margin-top: 1px; color: #4a6584; font-size: clamp(10px, 2.6vw, 11.5px); line-height: 1.35; }
+.share-special-issues a { display: block; margin-top: 4px; overflow: hidden; color: #0b3978; font-size: clamp(9.5px, 2.5vw, 11px); line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; text-decoration: underline; }
 .share-slide--final { color: white; background: linear-gradient(145deg, #071d3d, #0a58ad); }
 .share-slide--final h2 em { color: #83c7ff; }
 .share-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 30px; }
@@ -150,6 +151,6 @@ h1 span { color: #74c0ff; }
   .share-chair-grid { gap: 12px; }.share-chair-grid--3 { gap: 14px; }.share-chair-card { grid-template-columns: 70px minmax(0, 1fr); column-gap: 10px; }.share-chair-photo { width: 70px; height: 86px; }.share-chair-place { font-size: 10px; }.share-chair-type { font-size: 22px; margin-bottom: 8px; }
   .share-track-card { padding: 12px 14px; }.share-track-card h3 { font-size: 15px; }.share-track-open { margin-top: 7px; }
   .share-topic-list li { padding: 6px 9px 6px 22px; font-size: 13px; }.share-topic-list li::before { left: 10px; }
-  .share-submission-facts { margin: 12px auto; }.share-publication { margin-top: 10px; gap: 3px; }.share-publication p { font-size: 10px; }.share-subsection-label { margin-top: 10px; }.share-special-issues { margin-top: 6px; gap: 5px; }.share-special-issues a { padding: 6px 9px; }.share-special-issues strong { font-size: 10px; }.share-special-issues span { font-size: 9px; }
+  .share-submission-facts { margin: 12px auto; }.share-publication { margin-top: 10px; gap: 3px; }.share-publication p { font-size: 10px; }.share-subsection-label { margin-top: 10px; }.share-special-issues { margin-top: 6px; gap: 5px; }.share-special-issues li { padding: 6px 9px; }.share-special-issues strong { font-size: 10px; }.share-special-issues span { font-size: 9px; }.share-special-issues a { margin-top: 2px; font-size: 9px; }
 }
 @media (prefers-reduced-motion: reduce) { .share-deck { scroll-behavior: auto; }.share-swipe-hint span { animation: none; } }
