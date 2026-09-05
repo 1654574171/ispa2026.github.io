@@ -29,8 +29,8 @@
     ['submission', 'Submit'], ['support', 'Connect'],
   ];
 
-  const action = (label, href, tone = 'light') => `
-    <a class="share-action share-action--${tone}" href="${esc(href)}" ${external}>${esc(label)} <span aria-hidden="true">→</span></a>`;
+  const action = (label, href, tone = 'light', cue = '→') => `
+    <a class="share-action share-action--${tone}" href="${esc(href)}" ${external}>${esc(label)} <span aria-hidden="true">${esc(cue)}</span></a>`;
 
   function introSlide() {
     return `
@@ -50,7 +50,7 @@
     return `
       <section class="share-slide share-slide--paper" id="about" aria-labelledby="about-title">
         <div class="share-content share-center-content">
-          <p class="share-kicker">WHY ISPA 2026</p>
+          <p class="share-kicker"> </p>
           <h2 id="about-title">Introduction</h2>
           <p class="share-lead">${esc(data.meta.introduction)}</p>
           <div class="share-stats" aria-label="Conference highlights">
@@ -70,7 +70,7 @@
     return `
       <section class="share-slide share-slide--blue" id="dates" aria-labelledby="dates-title">
         <div class="share-content">
-          <p class="share-kicker">DATES</p>
+          <p class="share-kicker"></p>
           <h2 id="dates-title">Important Dates</h2>
           <div class="share-dates">
             ${data.deadlines.map((item) => {
@@ -128,21 +128,30 @@
 
   function submissionSlide() {
     const issues = data.specialIssues.map((issue) => `<li><a href="${esc(issue.url)}" target="_blank" rel="noopener">${esc(issue.journal)}</a></li>`).join('');
+    const [primaryAllowance, alternativeAllowance] = String(data.submission.pageAllowance).split(/\s+or\s+/i);
+    const [publicationNote, specialIssueNote] = data.submission.publication;
     return `
-      <section class="share-slide share-slide--signal" id="submission" aria-labelledby="submission-title">
-        <div class="share-content share-center-content">
-          <p class="share-kicker">PAPER SUBMISSION</p>
-          <h2 id="submission-title">Bring your<br><em>best work.</em></h2>
-          <div class="share-submission-facts">
-            <div><strong>${esc(data.submission.review)}</strong><span>review model</span></div>
-            <div><strong>${esc(data.submission.pageAllowance)}</strong><span>maximum ${esc(data.submission.maximumPages)} pages</span></div>
-          </div>
-          ${action('Submit via EDAS', data.meta.edasUrl, 'dark')}
-          <div class="share-publication">
-            ${data.submission.publication.map((line) => `<p>${esc(line)}</p>`).join('')}
-          </div>
-          <p class="share-subsection-label">Special Issues</p>
-          <ul class="share-special-issues">${issues}</ul>
+      <section class="share-slide share-slide--signal" id="submission" aria-label="Paper submission">
+        <div class="share-content share-center-content share-submission-content">
+          <section class="share-submission-module share-submission-module--submission" aria-labelledby="submission-module-title">
+            <h2 class="share-submission-module-title" id="submission-module-title">Submission</h2>
+            <div class="share-submission-facts">
+              <div><strong>${esc(data.submission.review)}</strong><span>review model</span></div>
+              <div class="share-submission-page-info"><strong>${esc(primaryAllowance)}</strong><span>maximum ${esc(data.submission.maximumPages)} pages</span><b>or ${esc(alternativeAllowance)}</b></div>
+            </div>
+            <div class="share-submission-action">${action('Submit via EDAS', data.meta.edasUrl, 'dark')}</div>
+          </section>
+          <section class="share-submission-module share-submission-module--publication" aria-labelledby="publication-module-title">
+            <h2 class="share-submission-module-title" id="publication-module-title">Publication</h2>
+            <div class="share-publication">
+              <p>${esc(publicationNote)}</p>
+            </div>
+          </section>
+          <section class="share-submission-module share-submission-module--issues" aria-labelledby="issues-module-title">
+            <h2 class="share-submission-module-title" id="issues-module-title">Special Issues</h2>
+            <p class="share-special-issues-note">${esc(specialIssueNote)}</p>
+            <ul class="share-special-issues">${issues}</ul>
+          </section>
         </div>
       </section>`;
   }
@@ -151,11 +160,23 @@
     return `
       <section class="share-slide share-slide--final" id="support" aria-labelledby="support-title">
         <div class="share-content share-final-content">
-          <p class="share-kicker">KUALA LUMPUR · DECEMBER 2026</p>
-          <h2 id="support-title">See you<br>at <em>ISPA.</em></h2>
-          <div class="share-actions">${action('Official website', data.meta.officialUrl, 'light')}${action('Submit via EDAS', data.meta.edasUrl, 'outline')}</div>
-          <div class="share-logo-wrap" aria-label="Sponsors and organizers">
-            ${[...data.sponsors, ...data.organizers].map(({ name, logo }) => `<div><img src="${esc(logo)}" alt="${esc(name)} logo" loading="lazy"></div>`).join('')}
+          <div class="share-final-primary">
+            <h2 id="support-title">Welcome to <em>ISPA 2026!</em></h2>
+            <div class="share-actions">${action('Official website', data.meta.officialUrl, 'final', '☞')}${action('Submit via EDAS', data.meta.edasUrl, 'final', '☞')}</div>
+          </div>
+          <div class="share-final-partners">
+            <p class="share-support-label">Sponsored and Supported by</p>
+            <div class="share-logo-wrap share-logo-wrap--sponsors" aria-label="Sponsors and supporters">
+              ${data.sponsors.map(({ name, logo }) => `<div><img src="${esc(logo)}" alt="${esc(name)} logo" loading="lazy"></div>`).join('')}
+            </div>
+            <p class="share-support-label">Organizers</p>
+            <div class="share-logo-wrap share-logo-wrap--organizers" aria-label="Organizers">
+              ${data.organizers.map(({ name, logo }) => `<div><img src="${esc(logo)}" alt="${esc(name)} logo" loading="lazy"></div>`).join('')}
+            </div>
+          </div>
+          <div class="share-final-footer">
+            <p class="share-kicker">KUALA LUMPUR · DECEMBER 2026</p>
+            <img class="share-qr-code" src="assets/QR_Code.png" alt="ISPA 2026 QR code" loading="lazy">
           </div>
         </div>
       </section>`;

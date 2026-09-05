@@ -137,14 +137,14 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertTrue(all(item["whiteSpace"] == "nowrap" and item["overflow"] == "hidden" for item in details))
         page.close()
 
-    def test_wide_desktop_chair_layout_uses_the_available_width(self):
+    def test_wide_desktop_chair_layout_uses_the_centered_content_width(self):
         page = self.page(width=1280, height=800)
         general_program = page.locator("#chairs-general-program")
         groups_width = round(general_program.locator(".share-chair-groups").bounding_box()["width"])
         portrait_widths = general_program.locator(".share-chair-photo").evaluate_all(
             "photos => photos.map(photo => Math.round(photo.getBoundingClientRect().width))"
         )
-        self.assertGreaterEqual(groups_width, 1000)
+        self.assertEqual(groups_width, 880)
         self.assertEqual(set(portrait_widths), {150})
         page.close()
 
@@ -174,13 +174,23 @@ class SiteSmokeTests(unittest.TestCase):
         self.assertEqual({category["width"] for category in categories}, {880})
         page.close()
 
-    def test_wide_desktop_chair_portraits_flow_from_the_left(self):
+    def test_wide_desktop_centers_chair_and_final_content(self):
+        page = self.page(width=1280, height=800)
+        centers = page.locator(
+            "#chairs-general-program .share-chair-category:first-child, #support .share-final-primary, #support .share-final-partners, #support .share-final-footer"
+        ).evaluate_all(
+            "nodes => nodes.map(node => { const box = node.getBoundingClientRect(); return Math.round(box.left + box.width / 2); })"
+        )
+        self.assertEqual(centers, [640, 640, 640, 640])
+        page.close()
+
+    def test_wide_desktop_chair_portraits_flow_from_the_center(self):
         page = self.page(width=1280, height=800)
         grid = page.locator("#chairs-vice-workshop .share-chair-category:nth-child(2) .share-chair-grid")
         positions = grid.locator(".share-chair-photo").evaluate_all(
             "photos => photos.map(photo => Math.round(photo.getBoundingClientRect().left))"
         )
-        self.assertEqual(grid.evaluate("grid => getComputedStyle(grid).justifyContent"), "start")
+        self.assertEqual(grid.evaluate("grid => getComputedStyle(grid).justifyContent"), "center")
         self.assertGreaterEqual(positions[1] - positions[0], 170)
         self.assertLessEqual(positions[1] - positions[0], 180)
         page.close()
@@ -205,23 +215,86 @@ class SiteSmokeTests(unittest.TestCase):
         )
         page.close()
 
+    def test_submission_slide_uses_three_labeled_modules(self):
+        page = self.page()
+        submission = page.locator("#submission")
+        self.assertEqual(submission.locator(".share-submission-module").count(), 3)
+        self.assertEqual(submission.locator(".share-submission-module-title").all_text_contents(), [
+            "Submission", "Publication", "Special Issues",
+        ])
+        self.assertEqual(submission.locator(".share-submission-module--submission .share-submission-facts").count(), 1)
+        self.assertEqual(submission.locator(".share-submission-module--publication .share-publication").count(), 1)
+        self.assertEqual(submission.locator(".share-submission-module--issues .share-special-issues").count(), 1)
+        self.assertEqual(submission.get_by_text("Bring your best work.", exact=True).count(), 0)
+        page.close()
+
+    def test_submission_modules_share_a_card_treatment(self):
+        page = self.page()
+        treatments = page.locator("#submission .share-submission-module").evaluate_all(
+            "modules => modules.map(module => { const style = getComputedStyle(module); return { radius: style.borderRadius, shadow: style.boxShadow }; })"
+        )
+        self.assertEqual([item["radius"] for item in treatments], ["22px", "22px", "22px"])
+        self.assertTrue(all(item["shadow"] != "none" for item in treatments))
+        page.close()
+
     def test_final_actions_swap_order_and_color_treatments(self):
         page = self.page()
         actions = page.locator("#support .share-actions a").evaluate_all(
             "links => links.map(link => ({ label: link.textContent.trim(), className: link.className }))"
         )
         self.assertEqual(actions, [
-            {"label": "Official website →", "className": "share-action share-action--light"},
-            {"label": "Submit via EDAS →", "className": "share-action share-action--outline"},
+            {"label": "Official website ☞", "className": "share-action share-action--final"},
+            {"label": "Submit via EDAS ☞", "className": "share-action share-action--final"},
+        ])
+        action_backgrounds = page.locator("#support .share-actions a").evaluate_all(
+            "links => links.map(link => getComputedStyle(link).backgroundColor)"
+        )
+        logo_background = page.locator("#support .share-logo-wrap > div").first.evaluate(
+            "card => getComputedStyle(card).backgroundColor"
+        )
+        self.assertEqual(len(set(action_backgrounds)), 1)
+        self.assertNotEqual(action_backgrounds[0], logo_background)
+        page.close()
+
+    def test_final_actions_offer_a_gentle_click_cue(self):
+        page = self.page()
+        animations = page.locator("#support .share-actions a").evaluate_all(
+            "links => links.map(link => getComputedStyle(link).animationName)"
+        )
+        self.assertEqual(animations, ["final-action-pulse", "final-action-pulse"])
+        sheen_layers = page.locator("#support .share-actions a").evaluate_all(
+            "links => links.map(link => getComputedStyle(link, '::after').zIndex)"
+        )
+        self.assertEqual(sheen_layers, ["0", "0"])
+        page.close()
+
+    def test_final_slide_groups_primary_and_partner_content(self):
+        page = self.page()
+        support = page.locator("#support")
+        self.assertEqual(support.locator(".share-final-primary").count(), 1)
+        self.assertEqual(support.locator(".share-final-partners").count(), 1)
+        self.assertEqual(support.locator(".share-final-primary .share-actions").count(), 1)
+        self.assertEqual(support.locator(".share-final-partners .share-support-label").all_text_contents(), [
+            "Sponsored and Supported by", "Organizers",
         ])
         page.close()
 
     def test_share_deck_keeps_supporting_organization_logos(self):
         page = self.page()
         support = page.locator("#support")
-        self.assertEqual(support.locator("img").count(), 8)
+        self.assertEqual(support.locator("img").count(), 9)
         self.assertTrue(support.get_by_alt_text("IEEE logo").is_visible())
         self.assertTrue(support.get_by_alt_text("Zhengzhou University logo").is_visible())
+        self.assertTrue(support.get_by_alt_text("ISPA 2026 QR code").is_visible())
+        self.assertEqual(support.get_by_alt_text("ISPA 2026 QR code").get_attribute("src"), "assets/QR_Code.png")
+        self.assertEqual(support.locator(".share-support-label").all_text_contents(), [
+            "Sponsored and Supported by", "Organizers",
+        ])
+        self.assertEqual(support.locator("h2").inner_text(), "Welcome to ISPA 2026!")
+        footer_order = support.locator(".share-final-footer > *").evaluate_all(
+            "nodes => nodes.map(node => node.className)"
+        )
+        self.assertEqual(footer_order, ["share-kicker", "share-qr-code"])
         page.close()
 
     def test_mobile_support_logos_use_white_cards_and_equal_heights(self):
