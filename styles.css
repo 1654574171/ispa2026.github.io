@@ -119,7 +119,7 @@ h1 span { color: #74c0ff; }
 }
 .share-slide--final { color: white; background: linear-gradient(145deg, #071d3d, #0a58ad); }
 .share-slide--final h2 em { color: #83c7ff; }
-.share-final-content { display: flex; flex-direction: column; min-height: calc(100svh - clamp(68px, 14vw, 152px)); padding-top: clamp(150px, 15svh, 88px); }
+.share-final-content { display: flex; flex-direction: column; min-height: calc(100svh - clamp(68px, 14vw, 152px)); padding-top: clamp(50px, 8svh, 72px); }
 .share-final-primary { max-width: 860px; }
 .share-slide--final h2 { max-width: 900px; text-wrap: balance; }
 .share-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: clamp(20px, 3vw, 30px); }
